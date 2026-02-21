@@ -7,72 +7,71 @@
 ![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)
 ![Repo](https://img.shields.io/badge/Source-Private-orange?style=flat-square)
 
-**A real-time dashboard for creating tasks, planning with AI, dispatching work to agents, and watching them execute.**
-
-Forked from [**crshdn/mission-control**](https://github.com/crshdn/mission-control) — customized for my own AI agent workflow and project ecosystem.
+**I took [crshdn's Mission Control](https://github.com/crshdn/mission-control) and turned it into the central hub for all my AI agent operations.** Create tasks, plan with AI, dispatch to agents, and watch them execute in real-time.
 
 ---
 
-## My Customizations
+## Why I Needed This
 
-Took the original Mission Control and adapted it to work with my projects:
+I run Claude Code, Codex, and custom agents across multiple projects. Without a dashboard, it was chaos — agents running in random terminals, no visibility into what's happening, no way to queue work. Mission Control gave me a visual interface to orchestrate all of it.
 
-- Integrated with my OpenClaw setup for dispatching tasks to Claude Code and Codex agents
-- Customized task templates and workflows for my specific projects (Ringora, trading bot, client sites)
-- Adjusted the agent orchestration layer for my Mac Mini build server infrastructure
+## What I Customized
 
-## Features
+The original Mission Control is a great foundation. Here's what I built on top:
 
-- **Task Management** — Create, prioritize, and organize tasks with full CRUD operations
-- **AI Planning** — Use AI to break down complex tasks into actionable subtasks
-- **Agent Dispatch** — Assign tasks to AI agents and monitor their progress in real-time
-- **Live Monitoring** — Watch agents work with streaming status updates
-- **OpenClaw Integration** — WebSocket connection to OpenClaw for AI agent orchestration
-- **Docker Support** — One-command deployment with Docker Compose
+### OpenClaw Gateway Integration
+- Connected Mission Control to my **OpenClaw setup** via WebSocket
+- Tasks created in the dashboard can be dispatched directly to Claude Code or Codex on my Mac Mini build server
+- Real-time streaming of agent output back to the dashboard — I can watch agents work live
+
+### Custom Task Templates for My Projects
+- Pre-built task templates for common operations across my projects:
+  - *"Bug fix in Ringora"* → auto-loads project context and dispatches
+  - *"Run trading bot backtest with config X"* → dispatches with the right parameters
+  - *"Deploy Orleans Cleaning to Vercel"* → runs the full deploy pipeline
+- Each template knows which project it belongs to, what context to load, and which agent to use
+
+### Agent Monitoring & History
+- Dashboard shows all running agents, their current task, and real-time output
+- Full history of completed tasks with logs, duration, and outcomes
+- Failed tasks are flagged with error context for quick debugging
+
+### Docker Deployment
+- Containerized the whole setup with Docker Compose for easy deployment on my build server
+- Single `docker compose up` to get the full dashboard running
 
 ## Architecture
 
 ```
 ┌──────────────────────────────────────────┐
 │            Mission Control UI             │
+│   Task Board │ Agent Monitor │ History    │
 │      Next.js 14 + React + TypeScript      │
 └──────────────────┬───────────────────────┘
-                   │
+                   │ WebSocket
                    ▼
 ┌──────────────────────────────────────────┐
-│             API Layer                     │
-│    REST Endpoints + Server Actions        │
+│           OpenClaw Gateway                │
+│    Agent Dispatch │ Task Queue │ Logs     │
 └──────────────────┬───────────────────────┘
                    │
           ┌────────┴────────┐
           ▼                 ▼
    ┌────────────┐   ┌─────────────┐
-   │   SQLite   │   │  OpenClaw   │
-   │  (Tasks,   │   │  Gateway    │
-   │   State)   │   │  (Agents)   │
+   │   SQLite   │   │  AI Agents  │
+   │  (Tasks,   │   │  Claude Code│
+   │   History) │   │  Codex CLI  │
    └────────────┘   └─────────────┘
 ```
 
 ## Tech Stack
 
-- **Framework:** Next.js 14 (App Router), TypeScript
-- **Database:** SQLite (lightweight, zero-config)
-- **AI Integration:** OpenClaw Gateway, Claude API, Codex CLI
-- **Deployment:** Docker, Docker Compose
-- **UI:** React with real-time state updates
+`Next.js 14` · `TypeScript` · `SQLite` · `WebSocket` · `Docker` · `OpenClaw Gateway` · `Claude API` · `Codex CLI`
 
 ## Credits
 
-Originally built by [**crshdn**](https://github.com/crshdn/mission-control) — I forked it and customized it for my workflow.
-
-## Skills Demonstrated
-
-- Evaluating and extending open source software for personal use
-- AI agent integration and orchestration patterns
-- Real-time UI updates and streaming
-- Docker containerization and deployment
-- Adapting existing systems to custom infrastructure
+Forked from [**crshdn/mission-control**](https://github.com/crshdn/mission-control). I customized it with my OpenClaw integration, project-specific task templates, and agent monitoring.
 
 ---
 
-> *This is a showcase page for a private repository. Source code available upon request for verified opportunities.*
+> *Closed source. Source code available for serious inquiries.*
